@@ -1,0 +1,5 @@
+5 5
+(4, 3, N) LRLFFLR
+(2, 2, E) FFLRFFL
+(0, 0, W) FFLR
+(0, 0, S) LLFFFFFF
