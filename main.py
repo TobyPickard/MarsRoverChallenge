@@ -20,6 +20,12 @@ def update_orientation(instruction: str, initial_orientation: str):
 
 #==============================================================================
 
+def check_position(grid: list, position: tuple):
+    return (True if position[0] in range(0,grid[0]+1) and 
+            position[1] in range(0,grid[1]+1) else False)
+
+#==============================================================================
+
 def move_rover(grid: list, instruction: str, orientation: str, initial_position: tuple):
     row, col = initial_position
     if instruction == 'F':
@@ -38,23 +44,16 @@ def move_rover(grid: list, instruction: str, orientation: str, initial_position:
 
 #==============================================================================
 
-def check_position(grid: list, position: tuple):
-    return (True if position[0] in range(0,grid[0]+1) and 
-            position[1] in range(0,grid[1]+1) else False)
-
-#==============================================================================
-
-def compute_positions(data: list, grid: list):
-    for i in data:
-        position, orientation, instructions = format_input(i)
-        for step in instructions: 
-            orientation = update_orientation(step, orientation)                                                            
-            position, success = move_rover(grid, step, orientation, position)
-            if success is False:
-                break
-        print(f'({position[0]}, {position[1]}, {orientation}) LOST' 
-                if success is False 
-                else f'({position[0]}, {position[1]}, {orientation})')
+def compute_positions(robot_data: list, grid: list):
+    position, orientation, instructions = format_input(robot_data)
+    for step in instructions: 
+        orientation = update_orientation(step, orientation)                                                            
+        position, success = move_rover(grid, step, orientation, position)
+        if success is False:
+            break
+    print(f'({position[0]}, {position[1]}, {orientation}) LOST' 
+            if success is False 
+            else f'({position[0]}, {position[1]}, {orientation})')
 
 #==============================================================================
 
@@ -65,8 +64,8 @@ def run_premade(file_path = 'robotInstructions.txt'):
     robots.remove(grid)
     grid = grid.split(' ')
     grid = list(map(int, grid))
-
-    compute_positions(robots, grid)
+    for robot in robots:
+        compute_positions(robot, grid)
 
 #==============================================================================
 
@@ -94,8 +93,8 @@ def run_user_inputs():
         robots.append(instructions)
         if input('Add another robot? (y/n)') == 'n':
             break
-    
-    compute_positions(robots, grid)
+    for robot in robots:
+        compute_positions(robot, grid)
 
 #==============================================================================
 
